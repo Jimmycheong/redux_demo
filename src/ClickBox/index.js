@@ -1,22 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { increment, decrement, reset } from './actionCreators'
+import { fetchUser , setUserName, setUserAge } from "../actions/usersActions"
 
 class ClickBox extends React.Component {
 
 	constructor(props){
 		super(props)
-		console.log(props)
 		this.state = {
-			'counter': 0
+			inputName : "",
+			inputAge : ""
+		}
+	}
+
+	setName = () => {
+		this.props.setUserName(this.state.inputName)
+	}
+
+	setAge = () => {
+		console.log("clicked")
+		this.props.setUserAge(this.state.inputAge)
+	}
+
+	updateInput = (inputValue, field) => {
+		switch (field) {
+			case "name": {
+				this.setState({inputName: inputValue})
+				break;
+			}
+			case "age": {
+				this.setState({inputAge: inputValue})
+				break;
+			}
+			default: 
+			 	break;
 		}
 	}
 
 	render(){
 		return(
 			<div>
-				<p>Hello world!</p>
-				<p>Counter: {this.props.counter}</p>
+				<p>Showing user</p>
+				<p>{this.props.user.name}</p>
+				<p>{this.props.user.age}</p>
+				<input placeholder="set name" type="text" onChange={e => this.updateInput(e.target.value, "name")}/>
+				<button onClick={this.setName}>Set Name</button>
+				<br/>
+				<input placeholder="set age" type="text" onChange={e => this.updateInput(e.target.value, "age")}/>
+				<button onClick={this.setAge}>Set Age</button>
 			</div>
 			)
 	}
@@ -24,11 +54,11 @@ class ClickBox extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    counter: state.counter
+    user: state.userA.user
   }
 }
 
-const mapDispatchToProps = { increment, decrement, reset }
+const mapDispatchToProps = { fetchUser , setUserName, setUserAge }
 
 export default connect(
   mapStateToProps,
